@@ -1,21 +1,21 @@
 {
-  "name": "blogsqlite_tutorial",
+  "name": "blogsql_tutorial",
   "version": "1.0.0",
-  "description": "Tutorial BlogSQLite",
+  "description": "Tutorial blogSQLite",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/otaviocesr/BlogSQLite_tutorial.git"
+    "url": "git+https://github.com/PedroMB123/BlogSQL_tutorial.git"
   },
   "author": "",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/otaviocesr/BlogSQLite_tutorial/issues"
+    "url": "https://github.com/PedroMB123/BlogSQL_tutorial/issues"
   },
-  "homepage": "https://github.com/otaviocesr/BlogSQLite_tutorial#readme",
+  "homepage": "https://github.com/PedroMB123/BlogSQL_tutorial#readme",
   "dependencies": {
     "body-parser": "^1.20.3",
     "ejs": "^3.1.10",

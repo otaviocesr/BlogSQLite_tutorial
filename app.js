@@ -1,61 +1,73 @@
-const express = require("express"); // Importa lib do Express
-const sqlite3 = require("sqlite3"); // Importa lib do sqlite3
+const bodyParser = require("body-parser");
+const express = require("express"); // Importa biblioteca do express
+const sqlite3 = require("sqlite3"); // Importa biblioteca sqlite3
 
-const PORT = 3000; // Porta TCP do servidor HTTP da aplicação
+const PORT = 8000; // Porta TCP do servidor HTTP da aplicação
 
-const app = express(); // Instância para uso do Express
+const app = express(); //Instãncia para uso de express
 
-// Cria conexão com o banco de dados
-const db = new sqlite3.Database("user.db"); // Instância para uso do Sqlite3, e usa o arquivo 'user.db'
-
+const db = new sqlite3.Database("user.db"); // Instância para uso de SQLite3, e usa o arquivo 'user.db'
+// Este método permite enviar comandos SQl em modo 'sequencial'
 db.serialize(() => {
-  // Este método permite enviar comandos SQL em modo 'sequencial'
   db.run(
-    "CREATE TABLE IF NOT EXISTS users (id INTEGER PRIMARY KEY AUTOINCREMENT, username TEXT, password TEXT)"
+    `CREATE TABLE IF NOT EXISTS users (id INTEGER PRIMARY KEY AUTOINCREMENT, username TEXT, password TEXT,
+    email TEXT, tel TEXT, cpf TEXT, rg TEXT)`
   );
 });
 
+// __dirname é variável interna do nodejs que guarda o caminho absoluto do projeto
+console.log(__dirname);
+
+// Aqui será acrescentado uma rota "/static", parar a pasta __dirname + "/static"
+// O app.use é usado para acrescenter rotas novas para o express gerenciar e poder usar
+// Middleware para isso, que neste caso é o express.static, que gerencia rotas estáticas
 app.use("/static", express.static(__dirname + "/static"));
 
-// Configurar EJS como o motor de visualização
+// Middleware para processar as requisições do body parameters do cliente
+app.use(bodyParser.urlencoded({ extended: true }));
+
+//Configurar EJS como o motor de visualização
 app.set("view engine", "ejs");
 
+// Cria conexão com o banco de dados
 const index =
-  '<a href="/">Home</a> <a href="/sobre">Sobre</a> <a href="/login"> Login</a> <a href="/cadastro"> Cadastro</a>';
-const sobre = 'Você está na página "Sobre"<br><a href ="/">Voltar</a>';
-const login = 'Você está na página "Login"<br><a href ="/">Voltar</a>';
-const cadastro = 'Você está na página "Cadastro"<br><a href ="/">Voltar</a>';
+  "<a href='/'>Home</a> <a href='/sobre'>Sobre</a> <a href='/login'>login</a> <a href='/cadastro'>Cadastro</a>";
+const sobre = "Você está na página 'sobre'<br><a href='/'>Voltar</a>";
+const login = "Você está na página 'login' <br><a href='/'>Voltar</a>";
+const cadastro = "Você está na página 'cadastro' <br><a href='/'>Voltar</a>";
 
-/* Método express.get necessita de dois parâmetros
-// Na ARROW FUNCTION , o primeiro são os dados do servidor (REQUISITION - 'req')
-o segundo são os dados que serão enviados ao cliente (RESULT - 'res') */
-
+/* Método express.get necessita de dois parãmetros
+Na ARROW FUNCTION, o primeiro são os dados do servidor (REQUISITION - 'req')
+O segundo são os dados que serão enviados ao cliente (RESULT - 'res')
+|*/
 app.get("/", (req, res) => {
-  // Rota raiz do meu servidor, acessa o browser com endereço https://localhost:3000/
-  // res.send(index);
   res.render("index");
 });
 
-// Programação de rotas do método GET do HTTP "app.get()"
 app.get("/sobre", (req, res) => {
-  // Rota raiz do meu servidor, acessa o browser com endereço https://localhost:3000/sobre
   res.send(sobre);
 });
 
 app.get("/login", (req, res) => {
-  // Rota raiz do meu servidor, acessa o browser com endereço https://localhost:3000/login
-  // res.send(login);
   res.render("login");
 });
 
 // Rota para processar o formulário de login
 app.post("/login", (req, res) => {
-  res.send("Login ainda não implementado.");
+  res.send("Login ainda não implementado");
 });
 
 app.get("/cadastro", (req, res) => {
-  // Rota raiz do meu servidor, acessa o browser com endereço https://localhost:3000/cadastro
   res.send(cadastro);
+});
+
+app.post("/cadastro", (req, res) => {
+  req.body
+    ? console.log(JSON.stringify(req.body))
+    : console.log(`Body vazio: ${req.bod}`);
+  res.send(
+    `Bem-vindo usuário: ${req.body.username}, seu email é ${req.body.email}`
+  );
 });
 
 // app.listen() deve ser o último comando da aplicação (app.js)

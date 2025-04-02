@@ -4,14 +4,14 @@ const PORT = 3000; // Porta TCP do servidor HTTP da aplicação
 
 const app = express();
 
-const index = '<a href="/sobre">Sobre</a> <a href="/info"> Info</a>';
+const index = "<a href='/sobre'>Sobre</a> <a href='/info'>Info</a>";
+const sobre = "Você está na página 'sobre'<br><a href='/'>Voltar</a>";
+const info = "Vocẽ está na página 'info' <br><a href='/'>Voltar</a>";
 
-const sobre = 'Você está na página "Sobre"<br><a href ="/">Voltar</a>';
-const info = 'Você está na página "Info"<br><a href ="/">Voltar</a>';
-
-/* Método express.get necessita de dois parâmetros
-// Na ARROW FUNCTION , o primeiro são os dados do servidor (REQUISITION - 'req')
-o segundo são os dados que serão enviados ao cliente (RESULT - 'res') */
+/* Método express.get necessita de dois parãmetros
+Na ARROW FUNCTION, o primeiro são os dados do servidor (REQUISITION - 'req')
+O segundo são os dados que serão enviados ao cliente (RESULT - 'res')
+|*/
 app.get("/", (req, res) => {
   res.send(index);
 });

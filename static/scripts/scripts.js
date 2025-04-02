@@ -3,11 +3,11 @@ console.log("JS CONECTADO!");
 const formulario = document.getElementById("cadastroForm");
 const nome = document.getElementById("nome");
 const email = document.getElementById("email");
-const senha = document.getElementById("senha");
-const confirmarSenha = document.getElementById("confirmarSenha");
-const celular = document.getElementById("celular");
-const cpf = document.getElementById("cpf");
-const rg = document.getElementById("rg");
+const senha = document.getElementById("password");
+const confirmarSenha = document.getElementById("confirmapassword");
+const celular = document.getElementById("tel");
+const cpf = document.getElementById("CPF");
+const rg = document.getElementById("RG");
 const msgError = document.getElementsByClassName("msgError");
 
 /* ------ FUNÇÃO PARA RENDERIZAR AS DIFERENTES MENSAGENS DE ERRO! ------ */
@@ -147,7 +147,7 @@ function fetchDatas(event) {
 }
 /* --------------------------------------------------------------------- */
 
-formulario.addEventListener("submit", fetchDatas);
+// formulario.addEventListener("submit", fetchDatas);
 
 nome.addEventListener("input", () => {
   if (nome.value && !checkNome()) {
