@@ -48,24 +48,13 @@ app.get("/", (req, res) => {
   res.redirect("cadastro"); // Redireciona para a ROTA cadastro
 });
 
-// Programação de rotas do método GET do HTTP 'app.get()'
-app.get("/sobre", (req, res) => {
-  console.log("GET /sobre");
-  // Rota raiz do meu servidor, acesse o browser com o endereço http://localhost:8000/sobre
-  res.render("sobre");
-});
-
-// GET Login
-app.get("/login", (req, res) => {
-  console.log("GET /login");
-  // Rota raiz do meu servidor, acesse o browser com o endereço http://localhost:8000/login
-  res.render("login");
-});
-
-// Rota para processar o formulário de login
-app.post("/login", (req, res) => {
-  console.log("POST /login");
-  res.send("Login ainda não implementado");
+app.get("/usuarios", (req, res) => {
+  const query = "SELECT * FROM users";
+  db.all(query, (err, row) => {
+    console.log(`GET /usuarios ${JSON.stringify(row)}`);
+    // res.send("Lista de usuários");
+    res.render("usertable");
+  });
 });
 
 // GET do cadastro
@@ -88,7 +77,7 @@ app.post("/cadastro", (req, res) => {
   // Colocar aqui as validações e inclusão no banco de dados do cadastro de usuário
   // 1. Validar dados do usuário
 
-  // 2. Saber se ele já existe no banco
+  // 2. Saber se ele já ex  iste no banco
   const query =
     "SELECT * from users WHERE email = ? OR cpf = ? OR rg = ? OR username = ?";
   db.get(query, [email, cpf, rg, username], (err, row) => {
@@ -113,6 +102,26 @@ app.post("/cadastro", (req, res) => {
   // res.send(
   //   `Bem-vindo usuário: ${req.body.username}, seu email é ${req.body.email}`
   // );
+});
+
+// Programação de rotas do método GET do HTTP 'app.get()'
+app.get("/sobre", (req, res) => {
+  console.log("GET /sobre");
+  // Rota raiz do meu servidor, acesse o browser com o endereço http://localhost:8000/sobre
+  res.render("sobre");
+});
+
+// GET Login
+app.get("/login", (req, res) => {
+  console.log("GET /login");
+  // Rota raiz do meu servidor, acesse o browser com o endereço http://localhost:8000/login
+  res.render("login");
+});
+
+// Rota para processar o formulário de login
+app.post("/login", (req, res) => {
+  console.log("POST /login");
+  res.send("Login ainda não implementado");
 });
 
 // app.listen() deve ser o último comando da aplicação (app.js)
