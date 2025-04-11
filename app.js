@@ -45,7 +45,7 @@ app.get("/", (req, res) => {
   // res.send(index);
   console.log("GET /index");
   // res.render(index);
-  res.redirect("cadastro"); // Redireciona para a ROTA cadastro
+  res.redirect("/cadastro"); // Redireciona para a ROTA cadastro
 });
 
 app.get("/usuarios", (req, res) => {
@@ -53,7 +53,7 @@ app.get("/usuarios", (req, res) => {
   db.all(query, (err, row) => {
     console.log(`GET /usuarios ${JSON.stringify(row)}`);
     // res.send("Lista de usuários");
-    res.render("usertable");
+    res.render("partials/usertable");
   });
 });
 
@@ -61,7 +61,7 @@ app.get("/usuarios", (req, res) => {
 app.get("/cadastro", (req, res) => {
   console.log("GET /cadastro");
   // Rota raiz do meu servidor, acesse o browser com o endereço http://localhost:8000/cadastro
-  res.render("cadastro");
+  res.render("pages/cadastro");
 });
 
 // POST do cadastro
@@ -108,20 +108,26 @@ app.post("/cadastro", (req, res) => {
 app.get("/sobre", (req, res) => {
   console.log("GET /sobre");
   // Rota raiz do meu servidor, acesse o browser com o endereço http://localhost:8000/sobre
-  res.render("sobre");
+  res.render("pages/sobre");
 });
 
 // GET Login
 app.get("/login", (req, res) => {
   console.log("GET /login");
   // Rota raiz do meu servidor, acesse o browser com o endereço http://localhost:8000/login
-  res.render("login");
+  res.render("pages/login");
 });
 
 // Rota para processar o formulário de login
 app.post("/login", (req, res) => {
   console.log("POST /login");
   res.send("Login ainda não implementado");
+});
+
+app.get("/dashboard", (req, res) => {
+  console.log("GET /dashboard");
+  // Rota raiz do meu servidor, acesse o browser com o endereço http://localhost:8000/login
+  res.render("pages/dashboard");
 });
 
 // app.listen() deve ser o último comando da aplicação (app.js)
