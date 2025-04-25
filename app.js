@@ -6,6 +6,9 @@ const PORT = 8000; // Porta TCP do servidor HTTP da aplicação
 
 const app = express(); //Instãncia para uso de express
 
+// Variáveis usadas no EJS )
+let config = { titulo: "", rodape: "" };
+
 const db = new sqlite3.Database("user.db"); // Instância para uso de SQLite3, e usa o arquivo 'user.db'
 // Este método permite enviar comandos SQl em modo 'sequencial'
 db.serialize(() => {
@@ -44,8 +47,10 @@ app.get("/", (req, res) => {
   // Rota raiz do meu servidor, acesse o browser com o endereço http://localhost:8000/
   // res.send(index);
   console.log("GET /index");
-  // res.render(index);
-  res.redirect("/cadastro"); // Redireciona para a ROTA cadastro
+
+  config = { titulo: "Blog da turma I2HNA - SESI Nova Odessa", rodape: "" };
+  res.render("pages/index", config);
+  // res.redirect("/cadastro"); // Redireciona para a ROTA cadastro
 });
 
 app.get("/usuarios", (req, res) => {
@@ -53,7 +58,7 @@ app.get("/usuarios", (req, res) => {
   db.all(query, (err, row) => {
     console.log(`GET /usuarios ${JSON.stringify(row)}`);
     // res.send("Lista de usuários");
-    res.render("partials/usertable");
+    res.render("partials/usertable", config);
   });
 });
 
@@ -61,7 +66,7 @@ app.get("/usuarios", (req, res) => {
 app.get("/cadastro", (req, res) => {
   console.log("GET /cadastro");
   // Rota raiz do meu servidor, acesse o browser com o endereço http://localhost:8000/cadastro
-  res.render("pages/cadastro");
+  res.render("pages/cadastro", config);
 });
 
 // POST do cadastro
@@ -108,14 +113,14 @@ app.post("/cadastro", (req, res) => {
 app.get("/sobre", (req, res) => {
   console.log("GET /sobre");
   // Rota raiz do meu servidor, acesse o browser com o endereço http://localhost:8000/sobre
-  res.render("pages/sobre");
+  res.render("pages/sobre", config);
 });
 
 // GET Login
 app.get("/login", (req, res) => {
   console.log("GET /login");
   // Rota raiz do meu servidor, acesse o browser com o endereço http://localhost:8000/login
-  res.render("pages/login");
+  res.render("pages/login", config);
 });
 
 // Rota para processar o formulário de login
@@ -127,7 +132,7 @@ app.post("/login", (req, res) => {
 app.get("/dashboard", (req, res) => {
   console.log("GET /dashboard");
   // Rota raiz do meu servidor, acesse o browser com o endereço http://localhost:8000/login
-  res.render("pages/dashboard");
+  res.render("pages/dashboard", config);
 });
 
 // app.listen() deve ser o último comando da aplicação (app.js)
