@@ -1,6 +1,7 @@
 const bodyParser = require("body-parser"); // Importa o body-parser
 const express = require("express"); // Importa biblioteca do express
 const sqlite3 = require("sqlite3"); // Importa biblioteca sqlite3
+const session = require("express-session"); // Importa biblioteca express-session
 
 const PORT = 8000; // Porta TCP do servidor HTTP da aplicação
 
@@ -17,6 +18,15 @@ db.serialize(() => {
     email TEXT, tel TEXT, cpf TEXT, rg TEXT)`
   );
 });
+
+// Configuração para uso de sessão (cookies) com Express
+app.use(
+  session({
+    secret: "senhateste",
+    resave: true,
+    saveUninitialized: true,
+  })
+);
 
 // __dirname é variável interna do nodejs que guarda o caminho absoluto do projeto
 // console.log(__dirname);
@@ -126,7 +136,24 @@ app.get("/login", (req, res) => {
 // Rota para processar o formulário de login
 app.post("/login", (req, res) => {
   console.log("POST /login");
-  res.send("Login ainda não implementado");
+  const { username, password } = req.body;
+
+  // Consultar o usuário no banco de dados
+  const query = "SELECT * FROM users WHERE username = ? AND password = ?";
+
+  db.get(query, [username, password], (err, row) => {
+    if (err) throw err;
+
+    // Se o usuário válido -> registra a sessão e redireciona para o dashboard
+    if (row) {
+      req.session.loggedin = true;
+      req.session.username = username;
+      res.redirect("/dashboard");
+    } // Se não, envia mensagem de erro (Usuário Inválido)
+    else {
+      res.send("Usuário Inválido!");
+    }
+  });
 });
 
 app.get("/dashboard", (req, res) => {
