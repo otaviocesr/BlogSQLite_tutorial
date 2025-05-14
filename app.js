@@ -59,7 +59,7 @@ app.get("/", (req, res) => {
   console.log("GET /index");
 
   config = { titulo: "Blog da turma I2HNA - SESI Nova Odessa", rodape: "" };
-  res.render("pages/index", config);
+  res.render("pages/index", { ...config, req: req });
   // res.redirect("/cadastro"); // Redireciona para a ROTA cadastro
 });
 
@@ -68,15 +68,19 @@ app.get("/usuarios", (req, res) => {
   db.all(query, (err, row) => {
     console.log(`GET /usuarios ${JSON.stringify(row)}`);
     // res.send("Lista de usuários");
-    res.render("partials/usertable", config);
+    res.render("partials/usertable", { ...config, req: req });
   });
 });
 
 // GET do cadastro
 app.get("/cadastro", (req, res) => {
   console.log("GET /cadastro");
-  // Rota raiz do meu servidor, acesse o browser com o endereço http://localhost:8000/cadastro
-  res.render("pages/cadastro", config);
+  if (!req.session.loggedin) {
+    res.render("pages/cadastro", { ...config, req: req });
+  } else {
+    // Rota raiz do meu servidor, acesse o browser com o endereço http://localhost:8000/cadastro
+    res.redirect("pages/dashboard", config);
+  }
 });
 
 // POST do cadastro
@@ -123,14 +127,14 @@ app.post("/cadastro", (req, res) => {
 app.get("/sobre", (req, res) => {
   console.log("GET /sobre");
   // Rota raiz do meu servidor, acesse o browser com o endereço http://localhost:8000/sobre
-  res.render("pages/sobre", config);
+  res.render("pages/sobre", { ...config, req: req });
 });
 
 // GET Login
 app.get("/login", (req, res) => {
   console.log("GET /login");
   // Rota raiz do meu servidor, acesse o browser com o endereço http://localhost:8000/login
-  res.render("pages/login", config);
+  res.render("pages/login", { ...config, req: req });
 });
 
 // Rota para processar o formulário de login
@@ -156,10 +160,38 @@ app.post("/login", (req, res) => {
   });
 });
 
+app.get("/failed_dashboard", (req, res) => {
+  res.render("pages/failed_dashboard", { ...config, req: req });
+});
+
 app.get("/dashboard", (req, res) => {
   console.log("GET /dashboard");
-  // Rota raiz do meu servidor, acesse o browser com o endereço http://localhost:8000/login
-  res.render("pages/dashboard", config);
+  console.log(JSON.stringify(config));
+
+  if (req.session.loggedin) {
+    db.all("SELECT * FROM users", [], (err, row) => {
+      if (err) throw err;
+      res.render("pages/dashboard", {
+        titulo: "DASHBOARD",
+        dados: row,
+        req: req,
+      });
+    });
+  } else {
+    console.log("Tentativa de acesso a área restrita");
+    res.redirect("/failed_dashboard");
+  }
+});
+
+app.get("/logout", (req, res) => {
+  req.session.destroy(() => {
+    res.redirect("/login");
+  });
+});
+
+app.use("*", (req, res) => {
+  // Envia uma resposta de erro 404
+  res.status(404).render("pages/failed_dashboard", { ...config, req: req });
 });
 
 // app.listen() deve ser o último comando da aplicação (app.js)
