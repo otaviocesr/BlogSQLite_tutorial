@@ -105,7 +105,7 @@ app.post("/cadastro", (req, res) => {
     if (row) {
       // A variável 'row' irá retornar os dados do banco de dados,
       // executado através do SQL, variável query
-      res.send("Usuário já cadastrado, refaça o cadastro");
+      res.redirect("usuario_ja_cadastrado");
     } else {
       // 3. Se usuário não existe no banco, cadastrá-lo
       const insertQuery =
@@ -113,7 +113,7 @@ app.post("/cadastro", (req, res) => {
       db.run(insertQuery, [username, password, email, tel, cpf, rg], (err) => {
         // Inserir a lógica do INSERT
         if (err) throw err;
-        res.send("Usuário cadastrado com sucesso");
+        res.redirect("/login");
       });
     }
   });
@@ -155,9 +155,27 @@ app.post("/login", (req, res) => {
       res.redirect("/dashboard");
     } // Se não, envia mensagem de erro (Usuário Inválido)
     else {
-      res.send("Usuário Inválido!");
+      res.redirect("/usuario_nao_existente");
     }
   });
+});
+
+app.get("/usuario_nao_existente", (req, res) => {
+  config = {
+    titulo: "usuario_nao_existente",
+    footer: "",
+    text: "<p>Usuário Inválido, retorne à página de <a href='login'>Login</a></p>",
+  };
+  res.render("pages/user_invalid", { ...config, req: req });
+});
+
+app.get("/usuario_ja_cadastrado", (req, res) => {
+  config = {
+    titulo: "usuario_ja_cadastrado",
+    footer: "",
+    text: "<p>Usuário já cadastrado, retorne à página de <a href='cadastro'>Cadastro</a> </p>",
+  };
+  res.render("pages/user_invalid", { ...config, req: req });
 });
 
 app.get("/failed_dashboard", (req, res) => {

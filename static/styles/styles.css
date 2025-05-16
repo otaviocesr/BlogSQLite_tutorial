@@ -320,3 +320,20 @@ tbody tr:hover {
 
   transition: all 0.2s ease;
 }
+
+.container2 {
+  width: 80%;
+  height: 80%;
+  background-color: #e3eed4;
+  border-radius: 30px;
+  box-shadow: 2px -10px 35px #0f2a1d;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.container2 div p {
+  color: #ff0000;
+  font-size: 55px;
+}
