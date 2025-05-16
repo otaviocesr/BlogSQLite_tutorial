@@ -1,5 +1,4 @@
 <% console.log(`usertable.ejs -> DADOS: ${JSON.stringify(dados)}`) %>
-<% if (req.session.loggedin) { %>
 <table>
   <thead class="usertable">
     <tr>
@@ -11,24 +10,24 @@
     </tr>
   </thead>
   <tbody>
-    <% let index=1; dados.forEach(user => { %>
-      <tr <%- req.session.username===user.username ? `style="color: white; font-style: italic; font-size: 2;" ` : `` %>>
-<td><%= user.id %></td>
-<td><%= user.username %></td>
-<td><%= user.email %></td>
-<td><%= user.tel %></td>
-<td><%= user.password %></td>
+    <% for (let i = 0; i < dados.length; i++) { %>
+
+      <tr <%- req.session.username===dados[i].username ? `style="color: white; font-style: italic;" ` : `` %>>
+
+        <td><%= dados[i].id %></td>
+        <td><%= dados[i].username %></td>
+        <td><%= dados[i].email %></td>
+        <td><%= dados[i].tel %></td>
+        <td><%= dados[i].password %></td>
       </tr>
-      <% index++; }); %>
+    <% } %>
+
   </tbody>
   <tfoot>
     <tr>
-      <th colspan="5" style="font-size: 16px;"><%=  `Usuários registrados: ${index-1}` %></th>
+
+      <th colspan="5" style="font-size: 16px;"><%=  `Usuários registrados: ${dados.length}` %></th>
     </tr>
   </tfoot>
 </table>
-<% } else { %>
-  <main style="padding: 20px; text-align: center; border: 10px solid red; background-color: tomato; font-size: 64px; border-radius: 150px;">
-    ACESSO RESTRITO!!! <br> VOCÊ FOI PARA O SAL!!! <br> A POLÍCIA FEDERAL IRÁ APARECER NA SUA CASA AMANHÃ <br>
-  </main>
-  <% } %>
+
